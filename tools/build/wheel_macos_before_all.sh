@@ -8,7 +8,7 @@ set -x
 
 dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-brew install gnu-sed postgresql@13
+brew install gnu-sed postgresql@14
 
 # Start the database for testing
 brew services start postgresql
