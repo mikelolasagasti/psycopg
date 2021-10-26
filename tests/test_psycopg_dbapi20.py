@@ -5,6 +5,7 @@ import psycopg
 from psycopg.conninfo import conninfo_to_dict
 
 from . import dbapi20
+from . import dbapi20_tpc
 
 
 @pytest.fixture(scope="class")
@@ -27,8 +28,19 @@ class PsycopgTests(dbapi20.DatabaseAPI20Test):
         pass
 
 
+# @skip_if_tpc_disabled
+@pytest.mark.usefixtures("with_dsn")
+class PsycopgTPCTests(dbapi20_tpc.TwoPhaseCommitTests):
+    driver = psycopg
+    # connect_args = () # set by the fixture
+
+    def connect(self):
+        return psycopg.connect(*self.connect_args)
+
+
 # Shut up warnings
 PsycopgTests.failUnless = PsycopgTests.assertTrue
+PsycopgTPCTests.assertEquals = PsycopgTPCTests.assertEqual
 
 
 @pytest.mark.parametrize(
